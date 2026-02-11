@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doctor Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Crimson+Pro:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0b1220;
+  --steel:#1f2937;
+  --paper:#f6f7f9;
+  --mist:#e2e8f0;
+  --teal:#1fb6aa;
+  --copper:#f97316;
+  --sun:#ffd166;
+  --shadow:0 26px 60px rgba(15,23,42,0.2);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:"Space Grotesk", sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(800px 500px at 10% -10%, rgba(31,182,170,0.2), transparent 60%),
+    radial-gradient(900px 600px at 100% 0%, rgba(249,115,22,0.2), transparent 60%),
+    linear-gradient(135deg, #fdfefe, #eef4f6);
+  padding:28px;
+}
+.shell{
+  max-width:1200px;
+  margin:0 auto;
+  display:grid;
+  gap:18px;
+}
+.hero{
+  background:var(--paper);
+  border-radius:26px;
+  padding:24px 26px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.hero h1{
+  font-family:"Crimson Pro", serif;
+  font-size:34px;
+  margin:0 0 8px;
+}
+.hero p{
+  color:#425466;
+  margin:0;
+}
+.hero .meta{
+  margin-top:10px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  font-size:12px;
+  color:#5a6a7a;
+}
+.pill{
+  background:#fff;
+  border:1px solid #e7e1d8;
+  padding:6px 10px;
+  border-radius:999px;
+}
+.ring{
+  position:absolute;
+  right:-40px;
+  bottom:-40px;
+  width:180px;
+  height:180px;
+  border-radius:50%;
+  background:conic-gradient(from 180deg, var(--teal), var(--copper), var(--sun), var(--teal));
+  filter:blur(12px);
+  opacity:0.25;
+}
+.card{
+  background:var(--paper);
+  border-radius:26px;
+  padding:18px;
+  box-shadow:var(--shadow);
+}
+.table-wrap{
+  width:100%;
+  overflow:auto;
+  border:1px solid var(--mist);
+  border-radius:18px;
+  background:#fff;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:900px;
+}
+th,td{
+  padding:12px;
+  border-bottom:1px solid #edf2f7;
+  vertical-align:top;
+  font-size:13px;
+}
+th{
+  text-transform:uppercase;
+  letter-spacing:0.6px;
+  color:#64748b;
+  font-size:11px;
+  background:#f8fafc;
+  position:sticky;
+  top:0;
+}
+.tag{
+  display:inline-block;
+  background:#f1f5f9;
+  border:1px solid #e2e8f0;
+  padding:4px 8px;
+  border-radius:999px;
+  font-size:11px;
+}
+select, textarea{
+  width:100%;
+  border-radius:12px;
+  border:1px solid #d7dde6;
+  padding:10px 12px;
+  font-size:13px;
+  background:#fff;
+}
+textarea{height:70px}
+.actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.btn{
+  border:none;
+  padding:10px 14px;
+  border-radius:12px;
+  color:#fff;
+  background:linear-gradient(135deg, var(--teal), #49d6c8);
+  font-weight:700;
+  cursor:pointer;
+}
+.link{
+  display:inline-flex;
+  align-items:center;
+  padding:9px 12px;
+  border-radius:12px;
+  background:#fff;
+  border:1px solid #e2e8f0;
+  text-decoration:none;
+  color:#2563eb;
+  font-size:12px;
+}
+.photo-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(80px,1fr));
+  gap:8px;
+}
+.photo-grid img{
+  width:100%;
+  border-radius:10px;
+  border:1px solid #e2e8f0;
+}
+.photo-actions{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin-top:6px;
+}
+.footer{
+  margin-top:8px;
+  font-size:12px;
+}
+.footer a{
+  color:#2563eb;
+  text-decoration:none;
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <div class="hero">
+    <div class="pill">Smart Health • Doctor</div>
+    <h1>Clinical Review Dashboard</h1>
+    <p>Review cases, view photos, update diagnosis, and prescribe.</p>
+    <div class="meta">
+      <span class="tag">Secure review</span>
+      <span class="tag">Photo evidence</span>
+      <span class="tag">Fast updates</span>
+    </div>
+    <div class="ring"></div>
+  </div>
+
+  <div class="card">
+    {% if success %}
+    <script>alert("Diagnosis updated successfully");</script>
+    {% endif %}
+
+    <div class="table-wrap">
+      <table>
+        <tr>
+          <th>Name</th><th>Age</th><th>Contact</th><th>Symptoms</th>
+          <th>Photos</th><th>Disease</th><th>Prescription</th><th>Action</th>
+        </tr>
+
+        {% for p in patients %}
+        <tr>
+          <td><b>{{ p.name }}</b></td>
+          <td>{{ p.age }}</td>
+          <td>{{ p.contact }}</td>
+          <td>{{ p.symptoms | join(", ") }}</td>
+
+          <td>
+            {% set photos = photos_by_pid.get(p.id, []) %}
+            {% if photos and photos|length > 0 %}
+            <div class="photo-grid">
+              {% for ph in photos %}
+                <img src="/photo/{{ ph.id }}" alt="Photo">
+              {% endfor %}
+            </div>
+            <div class="photo-actions">
+              {% for ph in photos %}
+                <a class="link" href="/download_photo/{{ ph.id }}">Download</a>
+              {% endfor %}
+            </div>
+            {% else %}
+            <span class="tag">No photos</span>
+            {% endif %}
+          </td>
+
+          <td>
+          <form method="POST" action="/update_disease">
+            <select name="disease">
+              <option selected>{{ p.disease }}</option>
+              <option>Respiratory Infection</option>
+              <option>Heart Related Issue</option>
+              <option>Common Cold</option>
+              <option>General Checkup Recommended</option>
+            </select>
+            <textarea name="remarks" placeholder="Doctor remarks" required></textarea>
+            <input type="hidden" name="patient_id" value="{{ p.id }}">
+          </td>
+
+          <td>
+            <textarea name="prescription" placeholder="Prescription (medicine + dosage + duration)" required>{{ p.prescription }}</textarea>
+          </td>
+
+          <td>
+            <div class="actions">
+              <button class="btn">Update</button>
+              <a class="link" href="/generate_pdf/{{ p.id }}">PDF</a>
+            </div>
+          </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <div class="footer">
+      <a href="/logout">Logout</a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

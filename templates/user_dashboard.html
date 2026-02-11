@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patient Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0f172a;
+  --slate:#334155;
+  --mist:#e2e8f0;
+  --paper:#f8fafc;
+  --mint:#2ec4b6;
+  --peach:#ff6b4a;
+  --sun:#ffd166;
+  --shadow:0 24px 60px rgba(15,23,42,0.18);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Manrope, sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(900px 500px at 10% -10%, rgba(255,107,74,0.18), transparent 60%),
+    radial-gradient(800px 500px at 100% 0%, rgba(46,196,182,0.18), transparent 60%),
+    linear-gradient(180deg, #ffffff, #f2f6fb 50%, #edf2f7);
+  padding:28px;
+}
+.shell{
+  max-width:1200px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap:22px;
+}
+.panel{
+  background:var(--paper);
+  border:1px solid #e6eaf0;
+  border-radius:26px;
+  padding:26px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.hero h1{
+  font-family:Fraunces, serif;
+  font-size:34px;
+  margin:0 0 10px;
+}
+.hero p{
+  color:var(--slate);
+  line-height:1.6;
+}
+.pill{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:#fff;
+  border:1px solid #e7e1d8;
+  padding:8px 12px;
+  border-radius:999px;
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:0.5px;
+}
+.status{
+  background:linear-gradient(135deg, #e7fff9, #f7fffd);
+  border:1px solid #c7f9ef;
+  padding:14px;
+  border-radius:14px;
+  margin-top:16px;
+  font-size:14px;
+}
+.notify{
+  background:linear-gradient(135deg, #fff1ec, #fff7f3);
+  border:1px solid #ffd2c5;
+  color:#7a2b1b;
+  padding:12px 14px;
+  border-radius:12px;
+  margin-top:14px;
+  font-size:14px;
+}
+.accent{
+  position:absolute;
+  right:-60px;
+  bottom:-60px;
+  width:200px;
+  height:200px;
+  border-radius:40px;
+  background:conic-gradient(from 180deg, var(--mint), var(--peach), var(--sun), var(--mint));
+  filter:blur(14px);
+  opacity:0.3;
+}
+.section{
+  margin-top:18px;
+}
+.section h3{
+  margin:0 0 10px;
+  font-size:14px;
+  text-transform:uppercase;
+  letter-spacing:0.6px;
+  color:#475569;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+.symptom{
+  background:#fff;
+  border:1px solid #e6eaf0;
+  border-radius:12px;
+  padding:10px;
+  font-size:13px;
+}
+.form-card h2{
+  margin:0 0 12px;
+  font-size:26px;
+}
+input[type="text"], input[type="number"], input[type="email"]{
+  width:100%;
+  padding:12px 14px;
+  border-radius:12px;
+  border:1px solid #d7dde6;
+  background:#fff;
+  font-size:14px;
+}
+.row{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+.file{
+  background:#fff;
+  border:1px dashed #cbd5e1;
+  padding:14px;
+  border-radius:12px;
+}
+.photo-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+  gap:10px;
+  margin-top:10px;
+}
+.photo-grid img{
+  width:100%;
+  border-radius:12px;
+  border:1px solid #e2e8f0;
+}
+.camera-wrap{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+video, canvas{
+  width:220px;
+  border-radius:12px;
+  border:1px solid #e2e8f0;
+  background:#fff;
+}
+.btn{
+  width:100%;
+  margin-top:16px;
+  padding:14px;
+  background:linear-gradient(135deg, var(--peach), #ff8a5f);
+  color:#fff;
+  border:none;
+  border-radius:14px;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 12px 28px rgba(255,107,74,0.35);
+}
+.btn-small{
+  width:auto;
+  padding:10px 14px;
+  border-radius:12px;
+  border:1px solid #e2e8f0;
+  background:#fff;
+  cursor:pointer;
+  font-size:13px;
+}
+.logout{
+  display:inline-block;
+  margin-top:16px;
+  text-decoration:none;
+  color:#2563eb;
+  font-size:13px;
+}
+.fade{
+  animation:fadeIn 700ms ease both;
+}
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(8px)}
+  to{opacity:1; transform:translateY(0)}
+}
+@media (max-width:980px){
+  .shell{grid-template-columns:1fr}
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .row{grid-template-columns:1fr}
+}
+.history{
+  margin-top:18px;
+  display:grid;
+  gap:12px;
+}
+.history-card{
+  background:#fff;
+  border:1px solid #e6eaf0;
+  border-radius:16px;
+  padding:14px;
+}
+.history-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  font-size:12px;
+  color:#475569;
+  margin-top:6px;
+}
+.tag{
+  background:#f1f5f9;
+  border:1px solid #e2e8f0;
+  padding:4px 8px;
+  border-radius:999px;
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <div class="panel hero fade">
+    <div class="pill">Smart Health</div>
+    <h1>Your health story, captured clearly.</h1>
+    <p>
+      Share symptoms, upload photos, and submit a quick report for the doctor to review.
+      You will receive updates and prescriptions here.
+    </p>
+
+    {% if notification %}
+    <div class="notify">{{ notification }}</div>
+    {% endif %}
+
+    {% if latest_record %}
+    <div class="status">
+      <b>Status:</b> {{ latest_record.status }}
+      {% if latest_record.updated_at %} (Updated: {{ latest_record.updated_at }}){% endif %}
+      {% if latest_record.prescription %}
+      <div style="margin-top:6px;"><b>Prescription:</b> {{ latest_record.prescription }}</div>
+      {% endif %}
+    </div>
+    {% if latest_photos and latest_photos|length > 0 %}
+    <div class="section">
+      <h3>Latest Photos</h3>
+      <div class="photo-grid">
+        {% for ph in latest_photos %}
+        <img src="/photo/{{ ph.id }}" alt="Photo">
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+    {% endif %}
+
+    {% if history_records and history_records|length > 0 %}
+    <div class="section">
+      <h3>History</h3>
+      <div class="history">
+        {% for h in history_records %}
+        <div class="history-card">
+          <div><b>{{ h.name }}</b> • {{ h.age }} years</div>
+          <div class="history-meta">
+            <div class="tag">Status: {{ h.status }}</div>
+            {% if h.updated_at %}<div class="tag">Updated: {{ h.updated_at }}</div>{% endif %}
+            {% if h.disease %}<div class="tag">Diagnosis: {{ h.disease }}</div>{% endif %}
+          </div>
+          {% if h.symptoms and h.symptoms|length > 0 %}
+          <div class="history-meta">Symptoms: {{ h.symptoms | join(", ") }}</div>
+          {% endif %}
+          {% if h.prescription %}
+          <div class="history-meta">Prescription: {{ h.prescription }}</div>
+          {% endif %}
+          {% set photos = history_photos.get(h.id, []) %}
+          {% if photos and photos|length > 0 %}
+          <div class="photo-grid" style="margin-top:8px;">
+            {% for ph in photos %}
+            <img src="/photo/{{ ph.id }}" alt="Photo">
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <a class="logout" href="/logout">Logout</a>
+    <div class="accent"></div>
+  </div>
+
+  <div class="panel form-card fade">
+    <h2>Patient Health Form</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+      <div class="row">
+        <input name="name" placeholder="Patient Name" required>
+        <input name="age" type="number" min="1" placeholder="Age" required>
+      </div>
+      <div class="row" style="margin-top:10px;">
+        <input name="contact" placeholder="Contact Number" required>
+        <input name="email" type="email" placeholder="Email Address" required>
+      </div>
+
+      <div class="section">
+        <h3>General Symptoms</h3>
+        <div class="grid">
+          <label class="symptom"><input type="checkbox" name="symptoms" value="fever"> Fever</label>
+          <label class="symptom"><input type="checkbox" name="symptoms" value="fatigue"> Fatigue</label>
+          <label class="symptom"><input type="checkbox" name="symptoms" value="bodypain"> Body Pain</label>
+          <label class="symptom"><input type="checkbox" name="symptoms" value="chills"> Chills</label>
+          <label class="symptom"><input type="checkbox" name="symptoms" value="sweating"> Excessive Sweating</label>
+          <label class="symptom"><input type="checkbox" name="symptoms" value="weightloss"> Weight Loss</label>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Respiratory Symptoms</h3>
+        <div class="grid">
+          <label class="symptom"><input type="checkbox" name="symptoms" value="cough"> Cough</label>
+          <label class="symptom"><input type="checkbox" name="symptoms" value="cold"> Cold</label>
+          <label class="symptom"><input type="checkbox" name="symptoms" value="breath"> Breath Problem</label>
+          <label class="symptom"><input type="checkbox" name="symptoms" value="chest"> Chest Pain</label>
+          <label class="symptom"><input type="checkbox" name="symptoms" value="sorethroat"> Sore Throat</label>
+          <label class="symptom"><input type="checkbox" name="symptoms" value="wheezing"> Wheezing</label>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Digestive Symptoms</h3>
+        <div class="grid">
+          <label class="symptom"><input type="checkbox" name="symptoms" value="nausea"> Nausea</label>
+          <label class="symptom"><input type="checkbox" name="symptoms" value="vomiting"> Vomiting</label>
+          <label class="symptom"><input type="checkbox" name="symptoms" value="diarrhea"> Diarrhea</label>
+          <label class="symptom"><input type="checkbox" name="symptoms" value="abdominal"> Abdominal Pain</label>
+          <label class="symptom"><input type="checkbox" name="symptoms" value="acidity"> Acidity</label>
+          <label class="symptom"><input type="checkbox" name="symptoms" value="appetite"> Loss of Appetite</label>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Neurological Symptoms</h3>
+        <div class="grid">
+          <label class="symptom"><input type="checkbox" name="symptoms" value="headache"> Headache</label>
+          <label class="symptom"><input type="checkbox" name="symptoms" value="dizziness"> Dizziness</label>
+          <label class="symptom"><input type="checkbox" name="symptoms" value="blurred"> Blurred Vision</label>
+          <label class="symptom"><input type="checkbox" name="symptoms" value="confusion"> Confusion</label>
+          <label class="symptom"><input type="checkbox" name="symptoms" value="sleep"> Sleep Disturbance</label>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Muscle & Joint Symptoms</h3>
+        <div class="grid">
+          <label class="symptom"><input type="checkbox" name="symptoms" value="jointpain"> Joint Pain</label>
+          <label class="symptom"><input type="checkbox" name="symptoms" value="swelling"> Swelling</label>
+          <label class="symptom"><input type="checkbox" name="symptoms" value="stiffness"> Morning Stiffness</label>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Skin Symptoms</h3>
+        <div class="grid">
+          <label class="symptom"><input type="checkbox" name="symptoms" value="rash"> Skin Rash</label>
+          <label class="symptom"><input type="checkbox" name="symptoms" value="itching"> Itching</label>
+          <label class="symptom"><input type="checkbox" name="symptoms" value="dryskin"> Dry Skin</label>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Upload Photos (multiple)</h3>
+        <div class="file">
+          <input type="file" name="photos" accept="image/*" multiple>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Capture from Camera</h3>
+        <div class="camera-wrap">
+          <video id="video" autoplay playsinline></video>
+          <canvas id="canvas" width="320" height="240"></canvas>
+        </div>
+        <input type="hidden" name="camera_photo" id="camera_photo">
+        <div class="camera-wrap" style="margin-top:10px;">
+          <button type="button" class="btn-small" id="startCamera">Start Camera</button>
+          <button type="button" class="btn-small" id="capturePhoto">Capture Photo</button>
+        </div>
+      </div>
+
+      <button class="btn" type="submit">Submit for Disease Prediction</button>
+    </form>
+  </div>
+</div>
+
+<script>
+const startBtn = document.getElementById("startCamera");
+const captureBtn = document.getElementById("capturePhoto");
+const video = document.getElementById("video");
+const canvas = document.getElementById("canvas");
+const cameraInput = document.getElementById("camera_photo");
+let stream;
+
+startBtn.addEventListener("click", async () => {
+  if (stream) return;
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+    video.srcObject = stream;
+  } catch (e) {
+    alert("Camera access denied or unavailable.");
+  }
+});
+
+captureBtn.addEventListener("click", () => {
+  if (!stream) {
+    alert("Start the camera first.");
+    return;
+  }
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  cameraInput.value = canvas.toDataURL("image/png");
+});
+</script>
+
+</body>
+</html>
