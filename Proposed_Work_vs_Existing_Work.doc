@@ -1,0 +1,13 @@
+Proposed Work vs Existing Work (IEEE Style)
+
+Existing Work:
+Semigran et al. [1] analyzed online symptom checkers and showed variable performance in diagnosis and triage. Their work is a benchmark study focused on evaluating accuracy, but it does not implement an end-to-end patient-doctor workflow system.
+
+Proposed Work:
+The proposed Smart Health system builds on the symptom-checker idea and implements a practical web application workflow. The system supports role-based authentication (doctor/patient), patient symptom submission, image upload/camera capture, doctor diagnosis and prescription updates, notification handling, and downloadable PDF medical reports. In addition, the implementation includes engineering improvements such as explicit patient signup flow, server-side validation for demographic/contact/medical inputs, file-type and file-size validation for uploaded images, and secure runtime configuration using environment-based secret management with production-safe debug defaults.
+
+Key Difference:
+While [1] evaluates symptom checker performance, the proposed work demonstrates how symptom-based prediction can be integrated into a usable mini clinical decision-support prototype with stronger usability and deployment-oriented safeguards.
+
+Reference
+[1] J. Semigran, D. Levine, S. Nundy, and A. Mehrotra, "Evaluation of symptom checkers for self diagnosis and triage: audit study," BMJ, vol. 351, p. h3480, 2015, doi: 10.1136/bmj.h3480.

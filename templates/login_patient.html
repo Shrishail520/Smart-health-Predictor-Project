@@ -118,6 +118,15 @@ body{
   border-radius:10px;
   font-size:13px;
 }
+.success{
+  margin-top:12px;
+  color:#166534;
+  background:#dcfce7;
+  border:1px solid #bbf7d0;
+  padding:10px 12px;
+  border-radius:10px;
+  font-size:13px;
+}
 .links{
   margin-top:14px;
   font-size:12px;
@@ -144,8 +153,8 @@ body{
       <h2>Sign in</h2>
       <form method="POST">
         <div class="field">
-          <label>Username</label>
-          <input name="username" placeholder="patient username" required>
+          <label>Email</label>
+          <input type="email" name="email" placeholder="patient@example.com" required>
         </div>
         <div class="field">
           <label>Password</label>
@@ -156,9 +165,13 @@ body{
       {% if error %}
       <div class="error">{{ error }}</div>
       {% endif %}
+      {% if success %}
+      <div class="success">Signup complete. Please log in.</div>
+      {% endif %}
       <div class="links">
         <a href="/">Back to choice</a>
         <a href="/login/doctor">Doctor login</a>
+        <a href="/signup/patient">Create account</a>
       </div>
     </div>
   </div>

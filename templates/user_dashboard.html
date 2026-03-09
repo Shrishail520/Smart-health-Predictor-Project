@@ -27,6 +27,25 @@ body{
     linear-gradient(180deg, #ffffff, #f2f6fb 50%, #edf2f7);
   padding:28px;
 }
+.system-head{
+  max-width:1200px;
+  margin:0 auto 18px;
+  background:#ffffff;
+  border:1px solid #e6eaf0;
+  border-radius:18px;
+  padding:16px 20px;
+  box-shadow:0 10px 28px rgba(15,23,42,0.08);
+}
+.system-head h1{
+  margin:0;
+  font-size:20px;
+  letter-spacing:0.4px;
+}
+.system-head p{
+  margin:4px 0 0;
+  color:#475569;
+  font-size:13px;
+}
 .shell{
   max-width:1200px;
   margin:0 auto;
@@ -79,6 +98,15 @@ body{
   padding:12px 14px;
   border-radius:12px;
   margin-top:14px;
+  font-size:14px;
+}
+.error{
+  background:#ffe4e1;
+  border:1px solid #ffc4bc;
+  color:#7a2b1b;
+  padding:12px 14px;
+  border-radius:12px;
+  margin:12px 0;
   font-size:14px;
 }
 .accent{
@@ -216,6 +244,32 @@ video, canvas{
   border-radius:16px;
   padding:14px;
 }
+.chatbox{
+  margin-top:18px;
+  background:#fff;
+  border:1px solid #e6eaf0;
+  border-radius:16px;
+  padding:14px;
+}
+.chatbox textarea{
+  width:100%;
+  min-height:90px;
+  padding:10px 12px;
+  border-radius:10px;
+  border:1px solid #d7dde6;
+  resize:vertical;
+  font-family:Manrope, sans-serif;
+}
+.chat-reply{
+  margin-top:10px;
+  background:#f8fafc;
+  border:1px solid #e2e8f0;
+  border-radius:10px;
+  padding:10px 12px;
+  white-space:pre-wrap;
+  font-size:14px;
+  color:#1f2937;
+}
 .history-meta{
   display:flex;
   flex-wrap:wrap;
@@ -233,6 +287,11 @@ video, canvas{
 </style>
 </head>
 <body>
+
+<div class="system-head">
+  <h1>SMART HEALTH PREDICTION SYSTEM</h1>
+  <p>AI Powered Medical Assistant</p>
+</div>
 
 <div class="shell">
   <div class="panel hero fade">
@@ -305,6 +364,9 @@ video, canvas{
 
   <div class="panel form-card fade">
     <h2>Patient Health Form</h2>
+    {% if form_error %}
+    <div class="error">{{ form_error }}</div>
+    {% endif %}
 
     <form method="POST" enctype="multipart/form-data">
       <div class="row">
@@ -403,6 +465,13 @@ video, canvas{
 
       <button class="btn" type="submit">Submit for Disease Prediction</button>
     </form>
+
+    <div class="chatbox">
+      <h3>Ask ChatGPT</h3>
+      <textarea id="chatMessage" placeholder="Ask general health guidance..."></textarea>
+      <button class="btn-small" id="chatSend" type="button" style="margin-top:10px;">Send</button>
+      <div id="chatReply" class="chat-reply" style="display:none;"></div>
+    </div>
   </div>
 </div>
 
@@ -413,6 +482,9 @@ const video = document.getElementById("video");
 const canvas = document.getElementById("canvas");
 const cameraInput = document.getElementById("camera_photo");
 let stream;
+const chatMessage = document.getElementById("chatMessage");
+const chatSend = document.getElementById("chatSend");
+const chatReply = document.getElementById("chatReply");
 
 startBtn.addEventListener("click", async () => {
   if (stream) return;
@@ -432,6 +504,36 @@ captureBtn.addEventListener("click", () => {
   const ctx = canvas.getContext("2d");
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
   cameraInput.value = canvas.toDataURL("image/png");
+});
+
+chatSend.addEventListener("click", async () => {
+  const message = chatMessage.value.trim();
+  if (!message) {
+    alert("Please enter a message.");
+    return;
+  }
+
+  chatSend.disabled = true;
+  chatReply.style.display = "block";
+  chatReply.textContent = "Loading...";
+
+  try {
+    const res = await fetch("/api/chatgpt", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      chatReply.textContent = data.error || "Request failed.";
+    } else {
+      chatReply.textContent = data.answer || "No answer received.";
+    }
+  } catch (e) {
+    chatReply.textContent = "Unable to connect to ChatGPT.";
+  } finally {
+    chatSend.disabled = false;
+  }
 });
 </script>
 

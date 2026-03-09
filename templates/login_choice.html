@@ -28,6 +28,25 @@ body{
   justify-content:center;
   padding:32px;
 }
+.tophead{
+  position:fixed;
+  top:14px;
+  left:50%;
+  transform:translateX(-50%);
+  text-align:center;
+  z-index:10;
+}
+.tophead h1{
+  margin:0;
+  font-size:16px;
+  letter-spacing:0.8px;
+  text-transform:uppercase;
+}
+.tophead p{
+  margin:2px 0 0;
+  font-size:11px;
+  color:#475569;
+}
 .wrap{
   width:min(1100px, 100%);
   display:grid;
@@ -103,9 +122,27 @@ body{
 @media (max-width:900px){
   .wrap{grid-template-columns:1fr}
 }
+footer.site-footer{
+  position:fixed;
+  left:50%;
+  bottom:10px;
+  transform:translateX(-50%);
+  text-align:center;
+  font-size:12px;
+  color:#4b5563;
+}
+footer.site-footer p{
+  margin:2px 0 0;
+  font-size:11px;
+  color:#64748b;
+}
 </style>
 </head>
 <body>
+  <div class="tophead">
+    <h1>SMART HEALTH PREDICTION SYSTEM</h1>
+    <p>AI Powered Medical Assistant</p>
+  </div>
   <div class="wrap">
     <div class="hero">
       <div class="badge">Smart Health</div>
@@ -131,5 +168,7 @@ body{
       </div>
     </div>
   </div>
+  <footer class="site-footer"><div>&copy; 2026 Smart Health Prediction System</div><p>AIML Mini Project</p></footer>
 </body>
 </html>
+
